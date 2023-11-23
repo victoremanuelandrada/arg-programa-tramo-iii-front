@@ -10,7 +10,7 @@ const TabladeDatos = (props) => {
     const navigate = useNavigate();
 
     const editar = (id)=>{
-        navigate('/cargar');
+        navigate('/editar/'+ id);
     }
     const eliminar = (id)=>{
         navigate('/eliminar/'+ id);
