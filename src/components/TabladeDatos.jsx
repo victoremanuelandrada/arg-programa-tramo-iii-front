@@ -9,6 +9,9 @@ const TabladeDatos = (props) => {
 
     const navigate = useNavigate();
 
+    const ver = (id)=>{
+      navigate('/ver/'+ id);
+  }
     const editar = (id)=>{
         navigate('/editar/'+ id);
     }
@@ -21,6 +24,8 @@ const TabladeDatos = (props) => {
       <thead>
         <tr>
           <th>#</th>
+          <th>Usuarios</th>
+          <th>Contraseña</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Accioes</th>
@@ -31,13 +36,16 @@ const TabladeDatos = (props) => {
         {
             lista.map((item, key) =>(
                 <tr key={ key }>
-                    <td>{ item.id }</td>
+                    <td>{ key + 1 }</td>
+                    <td>{ item.usuario}</td>
+                    <td>{item.contrasenia}</td>
                     <td>{ item.nombres }</td>
                     <td>{ item.apellidos }</td>
                     <td>
                         <ButtonGroup style={{maxWidth:'30px'}} >
-                            <Button variant="success" onClick={() =>editar(item.id)} >Editar</Button>
-                            <Button variant="danger" onClick={() =>eliminar(item.id)}>Eliminar</Button>
+                            <Button variant="primary" onClick={() =>ver(item._id)} >ver</Button>
+                            <Button variant="success" onClick={() =>editar(item._id)} >Editar</Button>
+                            <Button variant="danger" onClick={() =>eliminar(item._id)}>Eliminar</Button>
                         </ButtonGroup>
                     </td>
 

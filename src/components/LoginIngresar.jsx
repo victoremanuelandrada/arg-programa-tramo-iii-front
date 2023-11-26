@@ -12,10 +12,19 @@ import axios  from 'axios';
 function LoginIngresar() {
     const navigate = useNavigate();
 
+    const [usuario, setUsuario] = useState('');
+    const [contrasenia, setContrasenia] = useState('');
     const [nombres, setNombres] = useState('');
     const [apellidos, setApellidos] = useState('');
     const [deshabilitarBoton, setDeshabilitarBoton] = useState(false);
     const [errores, setErrores]= useState({});
+
+    const cambiarUsuario = (e) => {
+        setUsuario(e.target.value);
+    }
+    const cambiarContrasenia = (e) => {
+        setContrasenia(e.target.value);
+    }
 
     const cambiarNombres = (e) => {
         setNombres(e.target.value);
@@ -28,10 +37,21 @@ function LoginIngresar() {
     const verificarDatos = async ()=>{
         let misErrores = {}
         
+        if (usuario.length===0) {
+
+            //setErrores({nombres: 'Debe Introducir al menos un Nombre'})
+            misErrores.usuario = 'Debe Introducir un Nombre';
+         }
+         if (contrasenia.length===0) {
+
+            //setErrores({nombres: 'Debe Introducir al menos un Nombre'})
+            misErrores.nombres = 'Debe Introducir una Usuario';
+         }
+
         if (nombres.length===0) {
 
            //setErrores({nombres: 'Debe Introducir al menos un Nombre'})
-           misErrores.nombres = 'Debe Introducir al menos un Nombre';
+           misErrores.contrasenia = 'Debe Introducir al menos un Contraseña';
         }
 
         if (apellidos.length===0) {
@@ -44,8 +64,7 @@ function LoginIngresar() {
         if(Object.entries(misErrores).length === 0){
             setDeshabilitarBoton(true);
 
-            console.log(nombres);
-            console.log(apellidos);
+           
             await mandarDatos();
         }
     
@@ -54,6 +73,8 @@ function LoginIngresar() {
     const mandarDatos = async ()=>{
         const url = 'http://localhost:3000/usuario';
         const datos ={
+            usuario:usuario,
+            contrasenia:contrasenia,
             nombres: nombres,
             apellidos:apellidos,
         }
@@ -77,7 +98,30 @@ function LoginIngresar() {
     return (
 
         <Form>
-        <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+             <Form.Group as={Row} className="mb-3" >
+            <Form.Label column sm="2">
+            Usuario
+            </Form.Label>
+            <Col sm="10">
+            <Form.Control type="text"  onInput={cambiarUsuario} />
+                {
+                    errores.usuario && (<span style={{color: 'red'}}>{ errores.usuario}</span>) 
+                }
+            </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3" >
+            <Form.Label column sm="2">
+            Contraseña
+            </Form.Label>
+            <Col sm="10">
+            <Form.Control type="password"  onInput={cambiarContrasenia} />
+                {
+                    errores.contrasenia && (<span style={{color: 'red'}}>{ errores.contrasenia}</span>) 
+                }
+            </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" >
             <Form.Label column sm="2">
             Nombres
             </Form.Label>

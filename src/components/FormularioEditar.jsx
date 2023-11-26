@@ -16,6 +16,8 @@ function FormularioEditar(props) {
     const url = 'http://localhost:3000/usuario';
 
 
+    const [usuario, setUsuario] = useState('');
+    const [contrasenia, setContrasenia] = useState('');
     const [nombres, setNombres] = useState('');
     const [apellidos, setApellidos] = useState('');
     const [deshabilitarBoton, setDeshabilitarBoton] = useState(false);
@@ -23,6 +25,12 @@ function FormularioEditar(props) {
 
     const navigate = useNavigate();
 
+    const cambiarUsuario = (e) => {
+        setUsuario(e.target.value);
+    }
+    const cambiarContrasenia = (e) => {
+        setContrasenia(e.target.value);
+    }
     const cambiarNombres = (e) => {
         setNombres(e.target.value);
     }
@@ -34,6 +42,18 @@ function FormularioEditar(props) {
     const verificarDatos = async ()=>{
         let misErrores = {}
         
+        if (usuario.length===0) {
+
+            //setErrores({nombres: 'Debe Introducir al menos un Nombre'})
+            misErrores.usuario = 'Debe Introducir  un Usuario';
+         }
+
+         if (contrasenia.length===0) {
+
+            //setErrores({nombres: 'Debe Introducir al menos un Nombre'})
+            misErrores.contrasenia = 'Debe Introducir una Contraseña';
+         }
+
         if (nombres.length===0) {
 
            //setErrores({nombres: 'Debe Introducir al menos un Nombre'})
@@ -49,9 +69,6 @@ function FormularioEditar(props) {
 
         if(Object.entries(misErrores).length === 0){
             setDeshabilitarBoton(true);
-
-            console.log(nombres);
-            console.log(apellidos);
             await mandarDatos();
         }
     
@@ -61,6 +78,8 @@ function FormularioEditar(props) {
     const mandarDatos = async ()=>{
         const datos ={
             id:id,
+            usuario:usuario,
+            contrasenia:contrasenia,
             nombres: nombres,
             apellidos:apellidos,
         }
@@ -96,6 +115,8 @@ function FormularioEditar(props) {
         const respuesta = await axios.get(endPoint);
         if (respuesta.status===200) {
             const usuario = respuesta.data
+            setUsuario(usuario.usuario);
+            setContrasenia(usuario.contrasenia);
             setNombres(usuario.nombres);
             setApellidos(usuario.apellidos);
         } else {
@@ -114,6 +135,33 @@ function FormularioEditar(props) {
     return (
 
         <Form>
+            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                <Form.Label column sm="2">
+                Usuario
+                </Form.Label>
+                <Col sm="10">
+                <Form.Control type="text"   onInput={cambiarUsuario} defaultValue={usuario}/>
+                    {
+                        errores.usuario && (<span style={{color: 'red'}}>{errores.usuario}</span>) 
+                    }
+                
+            
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                <Form.Label column sm="2">
+                Contraseña
+                </Form.Label>
+                <Col sm="10">
+                <Form.Control type="text"   onInput={cambiarContrasenia} defaultValue={contrasenia}/>
+                    {
+                        errores.contrasenia && (<span style={{color: 'red'}}>{errores.contrasenia}</span>) 
+                    }
+                
+            
+                </Col>
+            </Form.Group>
+
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                 <Form.Label column sm="2">
                 Nombres
